@@ -18,7 +18,7 @@ connectDB();
 const app = express();
 
 /* =========================
-   CORS (VERY IMPORTANT)
+   CORS CONFIGURATION
 ========================= */
 
 const corsOptions = {
@@ -32,8 +32,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions)); // handle preflight
-
+app.options("*", cors(corsOptions)); // handle preflight requests
 
 /* =========================
    MIDDLEWARE
@@ -45,7 +44,6 @@ app.use("/uploads", express.static("uploads"));
 
 require("./config/passport")(passport);
 
-
 /* =========================
    ROUTES
 ========================= */
@@ -56,9 +54,8 @@ app.use("/api/bookings", bookingRoutes);
 app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/users", userRoutes);
 
-
 /* =========================
-   HEALTH CHECK
+   HEALTH CHECK ROUTE
 ========================= */
 
 app.get("/", (req, res) => {
@@ -66,7 +63,6 @@ app.get("/", (req, res) => {
     message: "🚀 Smart Travel API is running..."
   });
 });
-
 
 /* =========================
    TEST PROTECTED ROUTE
@@ -79,7 +75,6 @@ app.get("/api/test-protected", protect, (req, res) => {
   });
 });
 
-
 /* =========================
    404 HANDLER
 ========================= */
@@ -89,7 +84,6 @@ app.use((req, res) => {
     message: "Route not found"
   });
 });
-
 
 /* =========================
    GLOBAL ERROR HANDLER
@@ -101,7 +95,6 @@ app.use((err, req, res, next) => {
     message: err.message || "Server Error"
   });
 });
-
 
 /* =========================
    START SERVER

@@ -23,18 +23,30 @@ const app = express();
 // CORS CONFIGURATION
 // =========================
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://travel-booking-harshad.web.app"
+];
+
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://travel-booking-harshad.web.app"
-    ],
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: function (origin, callback) {
+      // allow requests with no origin (mobile apps / postman)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.indexOf(origin) === -1) {
+        return callback(null, true);
+      }
+
+      return callback(null, true);
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
   })
 );
 
-// Allow preflight requests
+// handle preflight requests
 app.options("*", cors());
 
 

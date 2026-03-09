@@ -2,15 +2,9 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
+
 const { protect } = require("../middleware/authMiddleware");
-const { getProfile } = require("../controllers/authController");
-
-router.get("/me", protect, getProfile);
-
-const {
-  registerUser,
-  loginUser,
-} = require("../controllers/authController");
+const { getProfile, registerUser, loginUser } = require("../controllers/authController");
 
 // ============================
 // Normal Auth
@@ -18,6 +12,12 @@ const {
 
 router.post("/register", registerUser);
 router.post("/login", loginUser);
+
+// ============================
+// Protected Profile
+// ============================
+
+router.get("/me", protect, getProfile);
 
 // ============================
 // Google Auth
@@ -41,7 +41,6 @@ router.get(
       { expiresIn: "7d" }
     );
 
-    // Prepare user data
     const user = {
       _id: req.user._id,
       name: req.user.name,
@@ -49,12 +48,11 @@ router.get(
       role: req.user.role
     };
 
-    // Encode user to send in URL
     const encodedUser = encodeURIComponent(JSON.stringify(user));
 
-    // Redirect to frontend with token + user
+    // Redirect to deployed frontend
     res.redirect(
-      `http://localhost:5173/google-success?token=${token}&user=${encodedUser}`
+      `https://travel-booking-harshad.web.app/google-success?token=${token}&user=${encodedUser}`
     );
   }
 );

@@ -21,14 +21,18 @@ const app = express();
    CORS CONFIGURATION
 ========================= */
 
-app.use(cors({
+const corsOptions = {
   origin: [
     "http://localhost:5173",
     "https://travel-booking-harshad.web.app"
   ],
+  methods: ["GET","POST","PUT","DELETE","OPTIONS"],
+  allowedHeaders: ["Content-Type","Authorization"],
   credentials: true
-}));
+};
 
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions)); // handle preflight requests
 /* =========================
    MIDDLEWARE
 ========================= */

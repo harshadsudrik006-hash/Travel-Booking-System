@@ -26,13 +26,13 @@ const corsOptions = {
     "http://localhost:5173",
     "https://travel-booking-harshad.web.app"
   ],
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true
 };
 
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions)); // IMPORTANT: handle preflight
+
 /* =========================
    MIDDLEWARE
 ========================= */

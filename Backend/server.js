@@ -21,17 +21,31 @@ const app = express();
    CORS CONFIGURATION
 ========================= */
 
-const corsOptions = {
-  origin: [
-    "http://localhost:5173",
-    "https://travel-booking-harshad.web.app"
-  ],
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true
-};
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:3000",
+  "https://travel-booking-harshad.web.app"
+];
 
-app.use(cors(corsOptions));
+app.use(
+  cors({
+    origin: function (origin, callback) {
+
+      // allow requests with no origin (like Postman)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.indexOf(origin) === -1) {
+        return callback(
+          new Error("CORS policy: This origin is not allowed"),
+          false
+        );
+      }
+
+      return callback(null, true);
+    },
+    credentials: true
+  })
+);
 
 /* =========================
    MIDDLEWARE
@@ -39,9 +53,12 @@ app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use(passport.initialize());
-app.use("/uploads", express.static("uploads"));
 
 require("./config/passport")(passport);
+
+/* STATIC UPLOAD FOLDER */
+
+app.use("/uploads", express.static("uploads"));
 
 /* =========================
    ROUTES

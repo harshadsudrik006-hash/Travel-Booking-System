@@ -1,26 +1,22 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://smart-travel-task6-3.onrender.com/api",
+  baseURL: "http://localhost:5000/api",   // FIXED
   headers: {
     "Content-Type": "application/json"
   }
 });
 
-// request interceptor
-API.interceptors.request.use(
-  (req) => {
-    const token = localStorage.getItem("token");
+API.interceptors.request.use((req) => {
 
-    if (token) {
-      req.headers.Authorization = `Bearer ${token}`;
-    }
+  const token = localStorage.getItem("token");
 
-    return req;
-  },
-  (error) => {
-    return Promise.reject(error);
+  if(token){
+    req.headers.Authorization = `Bearer ${token}`;
   }
-);
+
+  return req;
+
+});
 
 export default API;

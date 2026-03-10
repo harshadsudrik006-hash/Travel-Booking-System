@@ -32,11 +32,15 @@ const handleSubmit = async (e) => {
 
     const { data } = await API.post("/auth/login", form);
 
-    login({
-      token: data.token,
-      user: data.user
-    });
-
+   login({
+  token: data.token,
+  user: {
+    _id: data._id,
+    name: data.name,
+    email: data.email,
+    role: data.role
+  }
+});
     navigate("/");
 
   } catch (error) {

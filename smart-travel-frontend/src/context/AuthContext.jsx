@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from "react";
+import API from "../api/axios";
 
 export const AuthContext = createContext();
 
@@ -11,7 +12,6 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem("token");
     const storedUser = localStorage.getItem("user");
 
-    // Load user from localStorage
     if (storedUser && storedUser !== "undefined") {
       try {
         setUser(JSON.parse(storedUser));
@@ -21,35 +21,37 @@ export const AuthProvider = ({ children }) => {
       }
     }
 
-    // Always verify user if token exists
     if (token) {
 
-      fetch("http://localhost:5000/api/auth/me", {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      .then(res => res.json())
-      .then(data => {
+      API.get("/auth/me")
+        .then(res => {
 
-        if (data && data.name) {
-          localStorage.setItem("user", JSON.stringify(data));
-          setUser(data);
-        }
+          const data = res.data;
 
-      })
-      .catch(() => {
+          if (data && data.name) {
 
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
+            localStorage.setItem("user", JSON.stringify(data));
+            setUser(data);
 
-      });
+          }
+
+        })
+        .catch(() => {
+
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          setUser(null);
+
+        });
 
     }
 
   }, []);
 
-  // LOGIN
+  /* =========================
+     LOGIN
+  ========================= */
+
   const login = (data) => {
 
     const userData = data.user || data;
@@ -61,7 +63,10 @@ export const AuthProvider = ({ children }) => {
 
   };
 
-  // LOGOUT
+  /* =========================
+     LOGOUT
+  ========================= */
+
   const logout = () => {
 
     localStorage.removeItem("token");
@@ -72,9 +77,11 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
+
     <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>
+
   );
 
 };

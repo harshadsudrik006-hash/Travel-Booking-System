@@ -1,26 +1,5 @@
-# Node modules
-node_modules/
-
-# Environment variables
+node_modules
 .env
-
-# Build folders
-dist/
-build/
-
-# Logs
-npm-debug.log*
-yarn-debug.log*
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# Vite cache
-.vite
-
-# coverage
-coverage/
-
-# Firebase
-.firebase/
+uploads
+dist
+build

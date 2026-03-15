@@ -31,7 +31,6 @@ app.use(
   cors({
     origin: function (origin, callback) {
 
-      // allow requests with no origin (like Postman)
       if (!origin) return callback(null, true);
 
       if (allowedOrigins.indexOf(origin) === -1) {
@@ -46,6 +45,9 @@ app.use(
     credentials: true
   })
 );
+
+/* ADD THIS LINE */
+app.options("*", cors());
 
 /* =========================
    MIDDLEWARE

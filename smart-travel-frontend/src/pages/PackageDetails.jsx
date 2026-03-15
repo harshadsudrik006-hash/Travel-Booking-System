@@ -65,7 +65,7 @@ return(
 <img
 src={
 pkg.image
-?`http://localhost:5000${pkg.image}`
+?`https://smart-travel-backend-5var.onrender.com${pkg.image}`
 :`https://source.unsplash.com/600x400/?${pkg.destination}`
 }
 alt={pkg.title}
